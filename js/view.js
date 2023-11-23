@@ -15,12 +15,12 @@ class View {
                 <input type="text" placeholder="Lieu" class="form-control">
             </div>
             <div class="col-md-4">
-                <input type="text" placeholder="Date" class="form-control">
+                <input type="date" placeholder="Date" class="form-control">
             </div>
         </div>
         <div class="row">
             <div class="col-md-4">
-                <input type="text" placeholder="Heure" class="form-control">
+                <input type="time" placeholder="Heure" class="form-control">
             </div>
             <div class="col-md-4">
                 <input type="text" placeholder="Préférences (Forêt, Parc)" class="form-control">
@@ -76,10 +76,11 @@ class View {
 
 createCourseDiv(courseData) {
   const courseDiv = document.createElement('div');
-  courseDiv.className = 'card mb-4';
   courseDiv.innerHTML = `
-      <div class="card-header" id="courseName-${courseData.id}">${courseData.nom}</div>
+  <div class="card mb-4" id="div_global">
+
       <div class="card-body" id="course-${courseData.id}">
+      <div class="card-header" id="courseName-${courseData.id}">${courseData.nom}</div>
           <div class="row">
               <div class="col-md-6">
                   <p class="card-text"><strong>Lieu: <i class="fas fa-map-marker"></i></strong> <span id="courseLocation-${courseData.id}">${courseData.lieu}</span></p>
@@ -99,6 +100,7 @@ createCourseDiv(courseData) {
                   <button class="btn btn-danger" data-course-id="delete-${courseData.id}">Supprimer</button>
               </div>
           </div>
+      </div>
       </div>
   `;
   
@@ -136,11 +138,24 @@ getDeleteButton(courseId) {
   return document.querySelector(`button[data-course-id="delete-${courseId}"]`);
 }
 
-  updateCourseList(observable) {
-    const courseData = observable;
+updateCourseList(observable) {
+  const courseData = observable;
+  const existingCourse = this.div.querySelector(`#course-${courseData.id}`);
+
+  if (existingCourse) {
+    // Si le cours existe déjà, mettez à jour ses données
+    // Voici un exemple de mise à jour de certaines parties du contenu du cours
+    const locationElement = existingCourse.querySelector(`#courseLocation-${courseData.id}`);
+    const dateElement = existingCourse.querySelector(`#courseDate-${courseData.id}`);
+    // Mettez à jour les données selon vos besoins
+    locationElement.textContent = courseData.lieu;
+    dateElement.textContent = courseData.date;
+  } else {
+    // Si le cours n'existe pas, créez un nouveau cours
     const courseDiv = this.createCourseDiv(courseData, this.courseList.length);
     this.div.appendChild(courseDiv);
   }
+}
 
 
 enableEditFields(courseId) {
@@ -246,6 +261,27 @@ disableEditFields(courseId) {
   const saveButton = this.getSaveButton(courseId);
 }
 
+// recupertion des doonnees modofiees
+getEditedData(courseId) {
+  const nameElement = document.getElementById(`courseName-${courseId}`);
+  const locationElement = document.getElementById(`courseLocation-${courseId}`);
+  const dateElement = document.getElementById(`courseDate-${courseId}`);
+  const timeElement = document.getElementById(`courseTime-${courseId}`);
+  const preferencesElement = document.getElementById(`coursePreferences-${courseId}`);
+  const genreElement = document.getElementById(`courseGenre-${courseId}`);
+  const niveauElement = document.getElementById(`courseNiveau-${courseId}`);
+
+  return {
+    nom: nameElement.textContent,
+    lieu: locationElement.textContent,
+    date: dateElement.textContent,
+    heure: timeElement.textContent,
+    preferences: preferencesElement.textContent,
+    genre: genreElement.textContent,
+    niveau: niveauElement.textContent,
+  };
+}
+
 
  // In the View class
  toggleEditSaveButtons(courseId) {
@@ -263,13 +299,13 @@ disableEditFields(courseId) {
   }
 }
 // Dans votre classe View
- removeCourse(courseId) {
-  // Trouvez l'élément du cours correspondant par son ID
-  const courseElement = document.querySelector(`#course-${courseId}`);
-  console.log(courseElement);
+removeCourse(courseId) {
+  // Trouver l'élément correspondant à la carte du cours par son ID
+  const courseElement = document.querySelector(`#div_global`);
+  console.log(courseElement)
   if (courseElement) {
-    // Supprimez tout le contenu de l'élément du DOM
-    courseElement.innerHTML = '';
+    // Supprimer l'élément complet de la carte du cours
+    courseElement.remove();
   }
- }
+}
 }

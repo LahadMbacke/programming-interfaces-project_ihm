@@ -57,7 +57,7 @@ class Model extends Observable {
     if (courseId === this.courseData.id) {
       // Réinitialisez les données du cours
       this.courseData = {
-        id: this.courseData.id - 1, // Réduisez l'ID pour éviter les trous dans la séquence
+        id: '', // Réduisez l'ID pour éviter les trous dans la séquence
         nom: '',
         lieu: '',
         date: '',
@@ -71,6 +71,16 @@ class Model extends Observable {
       this.notifyObservers(this.courseData);
     }
   }
+  // deleteCourse(courseId) {
+  //   const indexToDelete = this.courses.findIndex(course => course.id === courseId);
+    
+  //   if (indexToDelete !== -1) {
+  //     this.courses.splice(indexToDelete, 1); // Supprime l'élément du tableau
+  //     this.setChanged();
+  //     this.notifyObservers(this.courses); // Notifie les observateurs avec le tableau mis à jour
+  //   }
+  // }
+  
 
   getData() {
     return this.courseData;

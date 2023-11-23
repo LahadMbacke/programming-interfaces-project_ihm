@@ -28,38 +28,6 @@ class Controler {
  
 }
 
-   // Gérer l'événement de clic sur le bouton "Ajouter"
-  // Dans votre méthode AddButtonClick
-// AddButtonClick() {
-//   const nom = this.view.nameInput.value;
-//   const lieu = this.view.locationInput.value;
-//   const date = this.view.dateInput.value;
-//   const time = this.view.timeInput.value;
-//   console.log(nom)
-
-//   if (nom.trim() !== '' && lieu.trim() !== '' && date.trim() !== '' && time.trim() !== '') {
-//     const courseData = {
-//       nom,
-//       lieu,
-//       date,
-//       heure: time,
-//     };
-//     this.model.addCourse(courseData);
-
-//     // Ajoutez un gestionnaire d'événements "Modifier" au nouveau cours
-//     this.addModifyEventListeners(courseData.id);
-//     this.addSaveEventListeners(courseData.id)
-//     this.addDeleteEventListeners(courseData.id)
-
-
-//     // Effacez les champs d'entrée
-//     this.view.nameInput.value = '';
-//     this.view.locationInput.value = '';
-//     this.view.dateInput.value = '';
-//     this.view.timeInput.value = '';
-//   }
-// }
-
 AddButtonClick() {
   const nom = this.view.nameInput.value;
   const lieu = this.view.locationInput.value;
@@ -148,7 +116,6 @@ addDeleteEventListeners(courseId) {
   if (deleteButton) {
     // Ajoutez un gestionnaire d'événements pour le bouton "Modifier"
     deleteButton.addEventListener('click', () => {
-      console.log(courseId)
       this.handleDeleteClick(courseId);
     });
   }
@@ -159,13 +126,6 @@ handleModifyClick(courseId) {
   this.view.enableEditFields(courseId);
   // Récupérez le bouton "Enregistrer" correspondant au cours actuel
   const saveButton = this.view.getSaveButton(courseId);
-  if (saveButton) {
-   // saveButton.classList.remove('invisible'); // Retirez la classe "invisible" pour afficher le bouton "Enregistrer"
-  }
-  // // Cachez le bouton "Modifier" si nécessaire
-  // const modifyButton = this.view.getModifyButton(courseId);
-  // if (modifyButton) {
-  // }
 }
 
 
@@ -174,9 +134,9 @@ handleModifyClick(courseId) {
 handleSaveClick(courseId) {
   this.view.disableEditFields(courseId);
   this.view.toggleEditSaveButtons(courseId);
-  // Obtenez les données éditées et mettez à jour le modèle si nécessaire
-  //const editedData = this.view.getEditedData(courseId);
-  // Mettez à jour le modèle ici
+  const updatedData = this.view.getEditedData(courseId); // Vous devez implémenter cette méthode dans la vue
+  this.model.updateCourse(courseId, updatedData);
+
 }
 // Dans votre contrôleur
 handleDeleteClick(courseId) {
@@ -184,7 +144,7 @@ handleDeleteClick(courseId) {
     // Demandez une confirmation à l'utilisateur (vous pouvez utiliser une boîte de dialogue ou une autre méthode)
     
     // Supprimez le cours du modèle
-    this.model.deleteCourse(courseId);
+    // this.model.deleteCourse(courseId);
 
     // Supprimez visuellement le cours de la vue (vous devrez ajouter cette fonction à votre vue)
     this.view.removeCourse(courseId);
